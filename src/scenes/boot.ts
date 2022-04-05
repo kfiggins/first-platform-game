@@ -15,7 +15,8 @@ export class BootScene extends Phaser.Scene {
   }
 
   public preload(): void {
-    this.load.image("logo", "assets/phaser3-logo.png");
+    this.load.atlas("knight", "assets/knight.png", "assets/knight.json");
+    this.load.image("ground", "assets/platform.png");
 
     const halfWidth = getGameWidth(this) * 0.5;
     const halfHeight = getGameHeight(this) * 0.5;
