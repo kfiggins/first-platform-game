@@ -80,7 +80,7 @@ export class Player extends Actor {
       }
     }
     if (this.keyW.isDown && (this.body.touching.down || this.body.blocked.down)) {
-      this.setVelocityY(-350);
+      this.setVelocityY(-320);
     }
   }
 }
