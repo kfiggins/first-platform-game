@@ -73,14 +73,14 @@ export class Player extends Actor {
       this.anims.play("right2", true);
     } else {
       this.setVelocityX(0);
-      if (!this.body.touching.down) {
+      if (!this.body.touching.down && !this.body.blocked.down) {
         this.anims.play("jump2", true);
       } else {
         this.anims.play("idle2", true);
       }
     }
-    if (this.keyW.isDown && this.body.touching.down) {
-      this.setVelocityY(-250);
+    if (this.keyW.isDown && (this.body.touching.down || this.body.blocked.down)) {
+      this.setVelocityY(-350);
     }
   }
 }

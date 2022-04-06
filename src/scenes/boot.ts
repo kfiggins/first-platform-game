@@ -15,9 +15,6 @@ export class BootScene extends Phaser.Scene {
   }
 
   public preload(): void {
-    this.load.atlas("knight", "assets/knight.png", "assets/knight.json");
-    this.load.image("ground", "assets/platform.png");
-
     const halfWidth = getGameWidth(this) * 0.5;
     const halfHeight = getGameHeight(this) * 0.5;
 
@@ -77,7 +74,9 @@ export class BootScene extends Phaser.Scene {
   private loadAssets() {
     // Load sample assets
 
-    // Source: Open Game Art
-    this.load.image("man", "assets/sprites/character.png");
+    this.load.atlas("knight", "assets/knight.png", "assets/knight.json");
+    this.load.image("ground", "assets/platform.png");
+    this.load.image("tiles", "assets/magic-cliffs.png");
+    this.load.tilemapTiledJSON("map", "assets/magic-cliffs-map.json");
   }
 }

@@ -8,19 +8,28 @@ export class GameScene extends Phaser.Scene {
   }
 
   create() {
-    this.player = new Player(this, 100, 450);
-    let platforms = this.physics.add.staticGroup();
+    // this.player = new Player(this, 200, 600);
+    // let platforms = this.physics.add.staticGroup();
+    const map = this.make.tilemap({ key: "map" });
+    const tileset = map.addTilesetImage("magic-cliffs", "tiles");
+    console.log(map);
+    const ground = map.createLayer("ground", tileset, 0, 0);
+    ground.setCollisionByExclusion(-1, true);
 
-    platforms.create(400, 568, "ground").setScale(2).refreshBody();
-    platforms.create(400, 450, "ground").setScale(0.5).refreshBody();
-    platforms.create(100, 380, "ground").setScale(0.5).refreshBody();
-    platforms.create(700, 400, "ground").setScale(0.5).refreshBody();
-    platforms.create(400, 310, "ground").setScale(0.5).refreshBody();
-    platforms.create(600, 250, "ground").setScale(0.5).refreshBody();
-    platforms.create(300, 200, "ground").setScale(0.5).refreshBody();
-    platforms.create(50, 100, "ground").setScale(0.5).refreshBody();
+    const objectsLayer = map.getObjectLayer("objects");
 
-    this.physics.add.collider(this.player, platforms);
+    objectsLayer.objects.forEach((object) => {
+      const { x = 0, y = 0, width, height, name } = object;
+      switch (name) {
+        case "player1-spawn":
+          this.player = new Player(this, x, y);
+          this.physics.add.collider(this.player, ground);
+          break;
+      }
+    });
+
+    this.physics.add.collider(this.player, ground);
+    this.cameras.main.startFollow(this.player);
   }
 
   update() {
