@@ -4,6 +4,7 @@ export class Player extends Actor {
   private keyA: Phaser.Input.Keyboard.Key;
   private keyD: Phaser.Input.Keyboard.Key;
   private space: Phaser.Input.Keyboard.Key;
+  private hit = 0;
   constructor(scene: Phaser.Scene, x: number, y: number) {
     super(scene, x, y, "knight");
     // KEYS

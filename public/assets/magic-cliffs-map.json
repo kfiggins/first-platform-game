@@ -31,6 +31,17 @@
                  "width":32,
                  "x":44,
                  "y":2332
+                }, 
+                {
+                 "height":37,
+                 "id":5,
+                 "name":"skeleton-spawn",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":30,
+                 "x":333,
+                 "y":2087
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -39,7 +50,7 @@
          "y":0
         }],
  "nextlayerid":4,
- "nextobjectid":5,
+ "nextobjectid":6,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.8.4",
