@@ -1,10 +1,19 @@
 import { Actor } from "./actor";
+
+enum HealthState {
+  Healthy,
+  Hurt,
+  Dead,
+}
 export class Player extends Actor {
   private keyW: Phaser.Input.Keyboard.Key;
   private keyA: Phaser.Input.Keyboard.Key;
   private keyD: Phaser.Input.Keyboard.Key;
   private space: Phaser.Input.Keyboard.Key;
   private hit = 0;
+  private healthState: HealthState = HealthState.Healthy;
+  private damageTime = 0;
+
   constructor(scene: Phaser.Scene, x: number, y: number) {
     super(scene, x, y, "knight");
     // KEYS
@@ -15,6 +24,33 @@ export class Player extends Actor {
     // PHYSICS
     this.getBody().setGravityY(300);
     this.initAnimations();
+  }
+
+  handleDamage(dir: Phaser.Math.Vector2) {
+    if (this.healthState === HealthState.Hurt) return;
+    this.setVelocity(dir.x, dir.y);
+    this.setTint(0xff0000);
+    this.healthState = HealthState.Hurt;
+    this.damageTime = 0;
+  }
+
+  protected preUpdate(time: number, delta: number): void {
+    super.preUpdate(time, delta);
+    switch (this.healthState) {
+      case HealthState.Healthy:
+        break;
+      case HealthState.Hurt:
+        this.damageTime += delta;
+        if (this.damageTime >= 250) {
+          this.healthState = HealthState.Healthy;
+          this.setTint(0xffffff);
+          this.damageTime = 0;
+        }
+        break;
+      case HealthState.Dead:
+        this.setTint(0x000000);
+        break;
+    }
   }
 
   private initAnimations(): void {
@@ -61,6 +97,8 @@ export class Player extends Actor {
   }
 
   update(): void {
+    if (this.healthState === HealthState.Dead) return;
+    if (this.healthState === HealthState.Hurt) return;
     if (this.space.isDown) {
       this.anims.play("attack2", true);
     } else if (this.keyA.isDown) {
