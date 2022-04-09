@@ -5,10 +5,11 @@ enum Direction {
   LEFT,
   RIGHT,
   UP,
+  DOWN,
 }
 
 const randomDirection = () => {
-  const newDirection = Phaser.Math.Between(0, 3);
+  const newDirection = Phaser.Math.Between(0, 4);
   return newDirection;
 };
 
@@ -67,6 +68,9 @@ export class Skeleton extends Phaser.Physics.Arcade.Sprite {
         break;
       case Direction.UP:
         this.getBody().setVelocityY(-this.speed);
+        break;
+      case Direction.DOWN:
+        this.getBody().setVelocityY(this.speed);
         break;
     }
   }
