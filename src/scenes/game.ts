@@ -22,6 +22,7 @@ export class GameScene extends Phaser.Scene {
       createCallback: (go) => {
         const skeletonGo = go as Skeleton;
         skeletonGo.setScale(1.3);
+        skeletonGo.setTarget(this.player);
       },
     });
 

@@ -1,22 +1,9 @@
 import Phaser, { Physics } from "phaser";
 import { createSkeletonAnims } from "../anims/skeletonAnims";
 
-enum Direction {
-  LEFT,
-  RIGHT,
-  UP,
-  DOWN,
-}
-
-const randomDirection = () => {
-  const newDirection = Phaser.Math.Between(0, 4);
-  return newDirection;
-};
-
 export class Skeleton extends Phaser.Physics.Arcade.Sprite {
-  private direction = Direction.LEFT;
   private speed = 100;
-  private moveEvent: Phaser.Time.TimerEvent;
+  private target?: Phaser.GameObjects.Components.Transform;
   constructor(scene: Phaser.Scene, x: number, y: number, texture: string, frame?: string | number) {
     super(scene, x, y, texture, frame);
     scene.add.existing(this);
@@ -27,28 +14,10 @@ export class Skeleton extends Phaser.Physics.Arcade.Sprite {
     this.getBody().setOffset(5, -1.5);
     this.anims.play("skeleton-idle", true);
     this.getBody().onCollide = true;
-    this.moveEvent = scene.time.addEvent({
-      delay: 2000,
-      callback: () => {
-        this.direction = randomDirection();
-      },
-      loop: true,
-    });
-    scene.physics.world.on(
-      Phaser.Physics.Arcade.Events.TILE_COLLIDE,
-      this.handleTileCollision,
-      this
-    );
   }
 
-  destroy(): void {
-    this.moveEvent.destroy();
-    super.destroy();
-  }
-
-  private handleTileCollision(go: Phaser.GameObjects.GameObject, tile: Phaser.Tilemaps.Tile) {
-    if (go !== this) return;
-    this.direction = randomDirection();
+  setTarget(target: Phaser.GameObjects.Components.Transform): void {
+    this.target = target;
   }
 
   protected preUpdate(time: number, delta: number): void {
@@ -59,19 +28,17 @@ export class Skeleton extends Phaser.Physics.Arcade.Sprite {
       this.flipX = true;
     }
 
-    switch (this.direction) {
-      case Direction.LEFT:
-        this.getBody().setVelocityX(-this.speed);
-        break;
-      case Direction.RIGHT:
-        this.getBody().setVelocityX(this.speed);
-        break;
-      case Direction.UP:
-        this.getBody().setVelocityY(-this.speed);
-        break;
-      case Direction.DOWN:
-        this.getBody().setVelocityY(this.speed);
-        break;
+    if (!this.target) return;
+    const distance = Phaser.Math.Distance.Between(this.x, this.y, this.target.x, this.target.y);
+    if (distance > 550) return;
+    const rotation = Phaser.Math.Angle.Between(this.x, this.y, this.target.x, this.target.y);
+    const vec = this.scene.physics.velocityFromRotation(rotation, this.speed);
+    this.setRotation(rotation);
+    this.setVelocity(vec.x, vec.y);
+    if (distance < 125) {
+      this.anims.play("skeleton-attack", true);
+    } else {
+      this.anims.play("skeleton-idle", true);
     }
   }
 
