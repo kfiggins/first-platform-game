@@ -62,7 +62,7 @@ export class GameScene extends Phaser.Scene {
       }
     });
 
-    this.physics.add.collider(this.skeletons, this.player);
+    // this.physics.add.collider(this.skeletons, this.player);
     this.physics.add.collider(
       this.player,
       this.skeletons,
