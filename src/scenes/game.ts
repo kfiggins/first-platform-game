@@ -55,7 +55,7 @@ export class GameScene extends Phaser.Scene {
   ) {
     const dx = this.player.x - skeleton.x;
     const dy = this.player.y - skeleton.y;
-    const dir = new Phaser.Math.Vector2(dx, dy).normalize().scale(400);
+    const dir = new Phaser.Math.Vector2(dx, dy).normalize().scale(500);
     this.player.handleDamage(dir);
   }
 

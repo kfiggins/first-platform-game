@@ -41,7 +41,7 @@ export class Player extends Actor {
         break;
       case HealthState.Hurt:
         this.damageTime += delta;
-        if (this.damageTime >= 250) {
+        if (this.damageTime >= 500) {
           this.healthState = HealthState.Healthy;
           this.setTint(0xffffff);
           this.damageTime = 0;
