@@ -36,6 +36,14 @@ export class Player extends Actor {
 
   handleShot(fireballs: Phaser.Physics.Arcade.Group) {
     const fireball = fireballs.get(this.x, this.y, "fireball");
+    console.log(
+      "pointer",
+      this.scene.game.input.mousePointer.x,
+      this.scene.game.input.mousePointer.y,
+      "fireball",
+      fireball.x,
+      fireball.y
+    );
     this.scene.physics.moveTo(
       fireball,
       this.scene.game.input.mousePointer.x,
