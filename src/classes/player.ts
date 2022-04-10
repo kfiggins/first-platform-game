@@ -34,6 +34,24 @@ export class Player extends Actor {
     this.damageTime = 0;
   }
 
+  handleShot(fireballs: Phaser.Physics.Arcade.Group) {
+    const fireball = fireballs.get(this.x, this.y, "fireball");
+    this.scene.physics.moveTo(
+      fireball,
+      this.scene.game.input.mousePointer.x,
+      this.scene.game.input.mousePointer.y,
+      100
+    );
+    // this.scene.physics.moveToObject(fireball, pointer, 240);
+    // const rotation = Phaser.Math.Angle.Between(this.x, this.y, pointer.x, pointer.y);
+    // const vec = this.scene.physics.velocityFromRotation(rotation, 300);
+    // fireball.setVelocity(vec.x, vec.y);
+    // fireball.setVelocity(pointer.x, pointer.y);
+    // const rotation = Phaser.Math.Angle.Between(this.x, this.y, pointer.x, pointer.y);
+    // new Phaser.Math.Vector2(fireball.body.velocity.x, fireball.body.velocity.y)
+    // fireball.setVelocity(vec.x, vec.y);
+  }
+
   protected preUpdate(time: number, delta: number): void {
     super.preUpdate(time, delta);
     switch (this.healthState) {
@@ -99,6 +117,7 @@ export class Player extends Actor {
   update(): void {
     if (this.healthState === HealthState.Dead) return;
     if (this.healthState === HealthState.Hurt) return;
+
     if (this.space.isDown) {
       this.anims.play("attack2", true);
     } else if (this.keyA.isDown) {
