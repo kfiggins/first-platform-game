@@ -5,6 +5,7 @@ import { Skeleton } from "../classes/skeleton";
 export class GameScene extends Phaser.Scene {
   private player!: Player;
   private skeletons!: Phaser.Physics.Arcade.Group;
+  private healthDisplay!: Phaser.GameObjects.Text;
   constructor() {
     super("GameScene");
   }
@@ -16,6 +17,13 @@ export class GameScene extends Phaser.Scene {
     const ground = map.createLayer("ground", tileset, 0, 0);
     ground.setCollisionByExclusion(-1, true);
     map.createLayer("beauty", tileset, 0, 0);
+
+    // Initialize the health display
+    this.healthDisplay = this.add.text(16, 16, "Health: 100", {
+      fontSize: "32px",
+      fill: "#fff",
+    });
+    this.healthDisplay.setScrollFactor(0); // This makes sure the text stays in the same place on the screen
 
     this.skeletons = this.physics.add.group({
       classType: Skeleton,
@@ -56,14 +64,23 @@ export class GameScene extends Phaser.Scene {
     this.cameras.main.startFollow(this.player);
   }
 
-  private handlePlayerSkeletonCollision(player: Phaser.GameObjects.GameObject, skeleton: any) {
+  private handlePlayerSkeletonCollision(
+    player: Phaser.GameObjects.GameObject,
+    skeleton: any
+  ) {
     const dx = this.player.x - skeleton.x;
     const dy = this.player.y - skeleton.y;
     const dir = new Phaser.Math.Vector2(dx, dy).normalize().scale(500);
-    this.player.handleDamage(dir);
+    this.player.receiveAttack(15, dir);
+  }
+
+  private updateHealthDisplay() {
+    // Update the text to reflect the player's current health
+    this.healthDisplay.setText("Health: " + this.player.getHPValue());
   }
 
   update() {
     this.player.update();
+    this.updateHealthDisplay();
   }
 }
